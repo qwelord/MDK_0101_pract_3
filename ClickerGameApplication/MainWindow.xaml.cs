@@ -40,6 +40,21 @@ namespace ClickerGameApplication
             autodmg.Start();
             SelectEnemy();
         }
+        private void CheckGameOver()
+        {
+            if (Player.Health <= 0)
+            {
+                dispatcherTimer.Stop();
+                autodmg.Stop();
+                MessageBox.Show("Game Over!");
+            }
+        }
+        private void UpdateEnemyImage()
+        {
+            if (Enemy.Name == "Ощепков") emptyImage.Source = new BitmapImage(new Uri("Image/monster1.png", UriKind.Relative));
+            if (Enemy.Name == "Куртагина") emptyImage.Source = new BitmapImage(new Uri("Image/monster2.png", UriKind.Relative));
+            if (Enemy.Name == "Ситчихин") emptyImage.Source = new BitmapImage(new Uri("Image/monster3.png", UriKind.Relative));
+        }
         private void AutoAttackEnemy(object sender, System.EventArgs e)
         {
             if (Enemy == null) return;
@@ -70,15 +85,25 @@ namespace ClickerGameApplication
             Enemies[Id].Exp,
             Enemies[Id].Money,
             Enemies[Id].Damage);
+            UpdateEnemyImage();
         }
         private void AttackPlayer (object sender, System.EventArgs e)
         {
             Player.Health -= Convert.ToInt32(Enemy.Damage * 100f / (100f - Player.Armor));
             UserInfoPlayer();
+            CheckGameOver();
         }
         private void AttackEnemy(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Enemy.Health -= Convert.ToInt32(Player.Damage * 100f / (100f -  Enemy.Armor));
+            Random random = new Random();
+            if (random.Next(0, 100) < 20)
+            {
+                Player.Health -= Convert.ToInt32(Enemy.Damage * 100f / (100f - Player.Armor));
+                MessageBox.Show("Сработала контатака!");
+                UserInfoPlayer();
+                CheckGameOver();
+            }
             if (Enemy.Health <= 0)
             {
                 Player.Exp += Enemy.Exp;
@@ -91,6 +116,7 @@ namespace ClickerGameApplication
                 emptyHealth.Content = "Жизненные показатели: " + Enemy.Health;
                 emptyArmor.Content = "Броня: " + Enemy.Armor;
             }
+            CheckGameOver();
         }
         public void UserInfoPlayer()
         {
