@@ -36,23 +36,6 @@ namespace ClickerGameApplication
         }
         private void AttackPlayer (object sender, System.EventArgs e)
         {
-            if (Enemies.Count == 0) return;
-
-            Random random = new Random();
-            int enemyIndex = random.Next(0, Enemies.Count);
-            Classes.PersonInfo enemy = Enemies[enemyIndex];
-
-            int damageToPlayer = (int)Math.Max(1, enemy.Damage - Player.Armor);
-            Player.Health -= damageToPlayer;
-
-            UserInfoPlayer();
-
-            if (Player.Health <= 0)
-            {
-                Player.Health = 0;
-                dispatcherTimer.Stop();
-                MessageBox.Show("Смэрть");
-            }
         }
         public void UserInfoPlayer()
         {
