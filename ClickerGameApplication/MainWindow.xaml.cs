@@ -23,6 +23,7 @@ namespace ClickerGameApplication
     {
         DispatcherTimer dispatcherTimer = new DispatcherTimer();
         public Classes.PersonInfo Player = new Classes.PersonInfo("Student", 100, 10, 1, 0, 0, 5);
+        public Classes.PersonInfo Enemy;
         public MainWindow()
         {
             InitializeComponent();
@@ -33,9 +34,24 @@ namespace ClickerGameApplication
             dispatcherTimer.Tick += AttackPlayer;
             dispatcherTimer.Interval = new System.TimeSpan(0, 0, 10);
             dispatcherTimer.Start();
+            SelectEnemy();
+        }
+        public void SelectEnemy()
+        {
+            int Id = new Random().Next(0, Enemies.Count);
+            Enemy = new Classes.PersonInfo(
+            Enemies[Id].Name,
+            Enemies[Id].Health,
+            Enemies[Id].Armor,
+            Enemies[Id].Level,
+            Enemies[Id].Exp,
+            Enemies[Id].Money,
+            Enemies[Id].Damage);
         }
         private void AttackPlayer (object sender, System.EventArgs e)
         {
+            Player.Health -= Convert.ToInt32(Enemy.Damage * 100f / (100f - Player.Armor));
+            UserInfoPlayer();
         }
         public void UserInfoPlayer()
         {
