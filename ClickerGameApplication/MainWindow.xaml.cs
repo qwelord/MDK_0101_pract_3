@@ -22,6 +22,7 @@ namespace ClickerGameApplication
     public partial class MainWindow : Window
     {
         DispatcherTimer dispatcherTimer = new DispatcherTimer();
+        DispatcherTimer autodmg = new DispatcherTimer();
         public Classes.PersonInfo Player = new Classes.PersonInfo("Student", 100, 10, 1, 0, 0, 5);
         public Classes.PersonInfo Enemy;
         public MainWindow()
@@ -34,7 +35,29 @@ namespace ClickerGameApplication
             dispatcherTimer.Tick += AttackPlayer;
             dispatcherTimer.Interval = new System.TimeSpan(0, 0, 10);
             dispatcherTimer.Start();
+            autodmg.Tick += AutoAttackEnemy;
+            autodmg.Interval = new System.TimeSpan(0, 0, 5);
+            autodmg.Start();
             SelectEnemy();
+        }
+        private void AutoAttackEnemy(object sender, System.EventArgs e)
+        {
+            if (Enemy == null) return;
+
+            Enemy.Health -= Convert.ToInt32(Player.Damage * 100f / (100f - Enemy.Armor));
+
+            if (Enemy.Health <= 0)
+            {
+                Player.Exp += Enemy.Exp;
+                Player.Money += Enemy.Money;
+                UserInfoPlayer();
+                SelectEnemy();
+            }
+            else
+            {
+                emptyHealth.Content = "Жизненные показатели: " + Enemy.Health;
+                emptyArmor.Content = "Броня: " + Enemy.Armor;
+            }
         }
         public void SelectEnemy()
         {
