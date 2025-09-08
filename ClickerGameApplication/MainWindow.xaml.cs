@@ -20,10 +20,27 @@ namespace ClickerGameApplication
     /// </summary>
     public partial class MainWindow : Window
     {
+        public Classes.PersonInfo Player = new Classes.PersonInfo("Student", 100, 10, 1, 0, 0, 5);
         public MainWindow()
         {
             InitializeComponent();
+            UserInfoPlayer();
         }
-        
+        public void UserInfoPlayer()
+        {
+            if (Player.Exp > 100 * Player.Level)
+            {
+                Player.Level++;
+                Player.Exp = 0;
+                Player.Health += 100;
+                Player.Damage++;
+                Player.Armor++;
+            }
+            playerHealth.Content = "Жизненные показатели: " + Player.Health;
+            playerArmor.Content = "Броня: " + Player.Armor;
+            playerLevel.Content = "Уровень: " + Player.Level;
+            playerExp.Content = "Опыт: " + Player.Exp;
+            playerMoney.Content = "Монеты: " + Player.Money;
+        }
     }
 }
