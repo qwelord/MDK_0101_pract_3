@@ -53,6 +53,22 @@ namespace ClickerGameApplication
             Player.Health -= Convert.ToInt32(Enemy.Damage * 100f / (100f - Player.Armor));
             UserInfoPlayer();
         }
+        private void AttackEnemy(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Enemy.Health -= Convert.ToInt32(Player.Damage * 100f / (100f -  Enemy.Armor));
+            if (Enemy.Health <= 0)
+            {
+                Player.Exp += Enemy.Exp;
+                Player.Money += Enemy.Money;
+                UserInfoPlayer();
+                SelectEnemy();
+            }
+            else
+            {
+                emptyHealth.Content = "Жизненные показатели: " + Enemy.Health;
+                emptyArmor.Content = "Броня: " + Enemy.Armor;
+            }
+        }
         public void UserInfoPlayer()
         {
             if (Player.Exp > 100 * Player.Level)
